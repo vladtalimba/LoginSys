@@ -1,0 +1,1 @@
+D:\Projects\LoginSys\loginsys.client\obj\Debug\loginsys.client.esproj.CoreCompileInputs.cache

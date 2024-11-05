@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "IeF+mjnHkfgq32vcf5rZi7mC1VRZtd1hFww3JPnqDms=",
+  "Source": "LoginSys.Server",
+  "BasePath": "_content/LoginSys.Server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "D:\\Projects\\LoginSys\\loginsys.client\\loginsys.client.esproj",
+      "Version": 2,
+      "Source": "loginsys.client",
+      "GetPublishAssetsTargets": "GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
