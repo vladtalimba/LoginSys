@@ -144,3 +144,4 @@ D:\Projects\LoginSys\LoginSys.Server\bin\Debug\net8.0\runtimes\win\lib\net6.0\Sy
 D:\Projects\LoginSys\LoginSys.Server\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Projects\LoginSys\LoginSys.Server\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\Projects\LoginSys\LoginSys.Server\bin\Debug\net8.0\System.Web.Cors.dll
+D:\Projects\LoginSys\LoginSys.Server\obj\Debug\net8.0\LoginSys.Server.sourcelink.json

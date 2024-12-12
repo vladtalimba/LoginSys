@@ -10,5 +10,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\components\" />
+    <Folder Include="src\interfaces\userInterface\" />
+    <Folder Include="src\hooks\" />
+    <Folder Include="src\styles\" />
+    <Folder Include="src\state\userState\" />
   </ItemGroup>
 </Project>
