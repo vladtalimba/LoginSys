@@ -12,6 +12,7 @@
     <Folder Include="src\components\" />
     <Folder Include="src\interfaces\userInterface\" />
     <Folder Include="src\hooks\" />
+    <Folder Include="src\errors\" />
     <Folder Include="src\styles\" />
     <Folder Include="src\state\userState\" />
   </ItemGroup>

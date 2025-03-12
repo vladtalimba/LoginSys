@@ -24,7 +24,7 @@ namespace LoginSys.Server.Migrations
 
             modelBuilder.Entity("LoginSys.Server.Models.Users", b =>
                 {
-                    b.Property<string>("UserName")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -32,9 +32,10 @@ namespace LoginSys.Server.Migrations
 
                     b.Property<string>("UserPassword")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("UserName");
+                    b.HasKey("Email");
 
                     b.ToTable("Users");
                 });

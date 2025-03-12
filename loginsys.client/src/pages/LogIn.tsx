@@ -5,20 +5,24 @@ import { setUserState } from "../state/userState/userSlice";
 import { useAppDispatch } from "../hooks/hooks";
 import Form from "../components/Form";
 import { authOptions, logInEndpoint } from "../api/options";
+import { useNavigate } from "react-router";
+import errorHandler from "../errors/errorHandler";
 
 
 function LogIn() {
 
+    const navigate = useNavigate();
+
     const dispatch = useAppDispatch();
 
-    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
 
     const [pass, setPass] = useState("");
 
     async function submitForm(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
         const user: User = {
-            UserName: userName,
+            Email: email,
             UserPassword: pass
         }
         // TODO: redirection and error handling and validation.
@@ -35,10 +39,9 @@ function LogIn() {
         // Fetch user from db.
         fetch(`${import.meta.env.VITE_API_BASE_URL}` + `${logInEndpoint}`, options)
         .then(res => res.json())
-          .then(data => {
-            dispatch(setUserState({ UserName: data.userName, UserPassword: data.userPassword }))
+        .then(data => {
+            errorHandler(data, dispatch, setUserState, navigate, "/home");
         }).catch(err => {
-            console.log(err);
             throw new Error("" + err);
         });
     }
@@ -46,7 +49,7 @@ function LogIn() {
     return (
         <div>
             <h1>Log In</h1>
-            <Form setUserName={setUserName} setPass={setPass} submitForm={submitForm} />
+            <Form setEmail={setEmail} setPass={setPass} submitForm={submitForm} />
             <div>
                 <p>Don't have an account?</p>
                 <NavLink to="signup" end>

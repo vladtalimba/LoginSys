@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LoginSys.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241204142811_UsersTable")]
+    [Migration("20250207101812_UsersTable")]
     partial class UsersTable
     {
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace LoginSys.Server.Migrations
 
             modelBuilder.Entity("LoginSys.Server.Models.Users", b =>
                 {
-                    b.Property<string>("UserName")
+                    b.Property<string>("Email")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
@@ -35,9 +35,10 @@ namespace LoginSys.Server.Migrations
 
                     b.Property<string>("UserPassword")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("UserName");
+                    b.HasKey("Email");
 
                     b.ToTable("Users");
                 });

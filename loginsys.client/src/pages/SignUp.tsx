@@ -2,20 +2,27 @@ import { useState } from "react";
 import { NavLink } from "react-router";
 import User from "../interfaces/userInterface/IUser";
 import Form from "../components/Form";
-import { authOptions, signUpEndpoint } from "../api/options";
+import { signUpEndpoint, authOptions } from "../api/options";
 import "../styles/formStyle.css";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "../hooks/hooks";
+import { setUserState } from "../state/userState/userSlice";
+import errorHandler from "../errors/errorHandler";
 
 function SignUp() {
 
-    const [userName, setUserName] = useState("");
+    const [email, setEmail] = useState("");
 
     const [pass, setPass] = useState("");
 
+    const dispatch = useAppDispatch();
+
+    const navigate = useNavigate();
 
     async function submitForm(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
         const user: User = { 
-            UserName: userName,
+            Email: email,
             UserPassword: pass
         }
 
@@ -31,11 +38,11 @@ function SignUp() {
         const options = authOptions(user);
 
         fetch(`${import.meta.env.VITE_API_BASE_URL}` + `${signUpEndpoint}`, options)
-          .then(res => {
-            console.log(res);
-            return res;
-        }).catch(err => {
-            console.log(err);
+            .then(res => res.json())
+            .then(data => {
+                errorHandler(data, dispatch, setUserState, navigate, "/home");
+            })
+            .catch(err => {
             throw new Error(err.message);
         });
     }
@@ -43,7 +50,7 @@ function SignUp() {
     return (
         <div className="authContainer">
             <h1>Sign Up</h1>
-            <Form setUserName={setUserName} setPass={setPass} submitForm={submitForm} />
+            <Form setEmail={setEmail} setPass={setPass} submitForm={submitForm} />
           <div>
               <p>Already have an account?</p>
               <NavLink to="/">

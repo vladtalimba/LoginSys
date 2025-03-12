@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using LoginSys.Server.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +12,15 @@ builder.Services.AddCors(options =>
     options.AddPolicy("Default",
         builder =>
         {
-            builder.AllowAnyOrigin()
+            builder.SetIsOriginAllowed(origin =>
+            {
+                if (origin.ToLower().StartsWith("https://localhost")) return true;
+
+                return false;
+            })
             .AllowAnyMethod()
-            .AllowAnyHeader();
+            .AllowAnyHeader()
+            .AllowCredentials();
         });
 });
 
@@ -25,6 +32,14 @@ builder.Services.AddSwaggerGen();*/
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+        options =>
+        {
+            options.ExpireTimeSpan = TimeSpan.FromDays(7);
+            options.SlidingExpiration = true;
+        }
+    );
 
 var app = builder.Build();
 
@@ -42,6 +57,7 @@ app.UseHttpsRedirection();
 
 app.UseCors();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

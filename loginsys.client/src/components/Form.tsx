@@ -1,11 +1,11 @@
 import "../styles/formStyle.css";
 
-function Form({ setUserName, setPass, submitForm }: React.ComponentState) {
+function Form({ setEmail, setPass, submitForm }: React.ComponentState) {
 
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
         const { name, value } = event.target;
 
-        if (name === "Username") setUserName(value);
+        if (name === "Email") setEmail(value);
         if (name === "Pass") setPass(value);
     }
 
@@ -13,8 +13,8 @@ function Form({ setUserName, setPass, submitForm }: React.ComponentState) {
         <div className="authContainer">
             <form>
                 <div className="formContainer">
-                    <label htmlFor="username">Enter your user name:</label>
-                    <input className="userInput" name="Username" id="username" type="text" onChange={event => {
+                    <label htmlFor="email">Enter your email:</label>
+                    <input className="userInput" name="Email" id="email" type="text" onChange={event => {
                         handleInputChange(event);
                     }}></input>
                     <label htmlFor="password">Enter your password:</label>

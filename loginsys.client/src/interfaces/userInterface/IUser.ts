@@ -1,5 +1,5 @@
 interface User {
-    UserName: string,
+    Email: string,
     UserPassword: string
 }
 

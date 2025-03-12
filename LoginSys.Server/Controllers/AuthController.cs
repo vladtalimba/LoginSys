@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using LoginSys.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Cors;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace LoginSys.Server.Controllers
 {
@@ -10,9 +13,9 @@ namespace LoginSys.Server.Controllers
     [Route("auth")]
     public class AuthController : Controller
     {
-      private readonly AppDbContext _db;
-      private PasswordHasher<Users> passwordHasher;
-
+        private readonly AppDbContext _db;
+        private PasswordHasher<Users> passwordHasher;
+        private ErorrHandler error;
         
         public AuthController(AppDbContext db)
         {
@@ -32,7 +35,7 @@ namespace LoginSys.Server.Controllers
         [HttpPost]
         [Route("signup")]
         // TODO: redirect to a dashboard page after signing up, as well as return the user.
-        public async Task<ActionResult<Users>> AddUser(Users user)
+        public async Task<IActionResult> AddUser(Users user)
         {
             if (ModelState.IsValid) {
                 // After validating the model, hash user password and add entry inside db.
@@ -41,7 +44,11 @@ namespace LoginSys.Server.Controllers
                 await _db.Users.AddAsync(user);
                 await _db.SaveChangesAsync();
             }
-            return ReturnUser(user);
+            else
+            {
+                return BadRequest(new ErorrHandler(400, "Bad request", "The form is invalid"));
+            }
+            return Ok(ReturnUser(user));
         }
 
         // Log in
@@ -50,19 +57,65 @@ namespace LoginSys.Server.Controllers
         [Route("login")]
         // TODO: Return the found user after all validations have been done. Redirect user to dashboard.
         // Error handling here, redirection and validation on the client side???
-        public async Task<Users> GetUser(Users user)
+        public async Task<IActionResult> GetUser(Users user)
         {
+            Console.WriteLine(ModelState);
             if (ModelState.IsValid)
             {
-                // Get user by username.
-                Users dbUser = await _db.Users.FindAsync(user.UserName);
+                // Get user by Email.
+                Users dbUser = await _db.Users.FindAsync(user.Email);
+
+                // If the user doesn't exist.
+                if(dbUser == null)
+                {
+                    return NotFound(new ErorrHandler(404, "Not found", "User was not found"));
+                }
+
+                // Verify password.
                 if (passwordHasher.VerifyHashedPassword(dbUser, dbUser.UserPassword, user.UserPassword) != 0)
                 {
-                    return ReturnUser(dbUser);
+                    // Cookie settings.
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, user.Email),
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(
+                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        AllowRefresh = true,
+                        ExpiresUtc = DateTime.UtcNow.AddDays(7),
+                        IsPersistent = true,
+                        IssuedUtc = DateTime.UtcNow
+                    };
+
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
+
+                    // Return user.
+                    return Ok(ReturnUser(dbUser));
+                }else
+                {
+                    // If model is invalid, return error.
+                    return BadRequest(new ErorrHandler(400, "Bad request", "The form is invalid"));
                 }
 
             }
-            return null;
+            // Return error.
+            return NotFound(new ErorrHandler(404, "Not found", "User was not found"));
+        }
+
+        [EnableCors("Default")]
+        [HttpGet]
+        [Route("logout")]
+        public async void LogOut()
+        {
+            await HttpContext.SignOutAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme);
         }
     }
 }
