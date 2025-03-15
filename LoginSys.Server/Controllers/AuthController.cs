@@ -4,7 +4,6 @@ using LoginSys.Server.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Cors;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 
 namespace LoginSys.Server.Controllers
@@ -81,7 +80,7 @@ namespace LoginSys.Server.Controllers
                     };
 
                     var claimsIdentity = new ClaimsIdentity(
-                        claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                        claims, "LOGIN_DETAILS");
 
                     var authProperties = new AuthenticationProperties
                     {
@@ -92,7 +91,7 @@ namespace LoginSys.Server.Controllers
                     };
 
                     await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        "LOGIN_DETAILS",
                         new ClaimsPrincipal(claimsIdentity),
                         authProperties);
 
@@ -114,8 +113,7 @@ namespace LoginSys.Server.Controllers
         [Route("logout")]
         public async void LogOut()
         {
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync("LOGIN_DETAILS");
         }
     }
 }

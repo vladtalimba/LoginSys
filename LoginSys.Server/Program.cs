@@ -33,13 +33,22 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+builder.Services.AddAuthentication().AddCookie(
+        "LOGIN_DETAILS",
         options =>
         {
+            options.LoginPath = "/login";
+            options.Cookie.Name = "LOGIN_DETAILS";
             options.ExpireTimeSpan = TimeSpan.FromDays(7);
             options.SlidingExpiration = true;
-        }
+        } 
     );
+
+builder.Services.AddAuthorization(
+    options =>
+    {
+        options.AddPolicy("loggedin", policy => policy.RequireClaim("loggedin", "true"));
+    });
 
 var app = builder.Build();
 
