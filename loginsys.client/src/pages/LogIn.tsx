@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
 import User from "../interfaces/userInterface/IUser";
 import { setUserState } from "../state/userState/userSlice";
@@ -15,14 +15,19 @@ function LogIn() {
 
     const dispatch = useAppDispatch();
 
-    const [email, setEmail] = useState("");
+    const [userName, setUserName] = useState("");
 
     const [pass, setPass] = useState("");
+
+    // Validate login.
+    useEffect(() => {
+        verifyLogin();
+    }, []);
 
     async function submitForm(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
         const user: User = {
-            Email: email,
+            UserName: userName,
             UserPassword: pass
         }
         // TODO: redirection and error handling and validation.
@@ -46,10 +51,15 @@ function LogIn() {
         });
     }
 
+    // TODO: find a way to handle cookie validation server-side and handle redirection here.
+    async function verifyLogin() {
+        
+    }
+
     return (
         <div>
             <h1>Log In</h1>
-            <Form setEmail={setEmail} setPass={setPass} submitForm={submitForm} />
+            <Form setUserName={setUserName} setPass={setPass} submitForm={submitForm} />
             <div>
                 <p>Don't have an account?</p>
                 <NavLink to="signup" end>

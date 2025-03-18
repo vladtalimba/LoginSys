@@ -6,10 +6,9 @@ namespace LoginSys.Server.Models
     {
         [Key]
         [Required]
-        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "The email address must be valid")]
-        public string Email { get; set; }
+        public string UserName { get; set; }
         [Required]
-        [StringLength(20, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 8)]
+        [StringLength(200, ErrorMessage = "The password needs to be at least 8 characters long", MinimumLength = 8)]
         public string UserPassword { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;

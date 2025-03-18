@@ -9,7 +9,7 @@ function errorHandler(data, dispatch, setUserState, navigate, navUrl) {
             throw new Error("" + values[0]);
         }
     } else if (data && !data.error && !data.errors) {
-        dispatch(setUserState({ Email: data.email, UserPassword: data.userPassword }));
+        dispatch(setUserState({ UserName: data.userName, UserPassword: data.userPassword }));
         navigate(navUrl);
     }
 }

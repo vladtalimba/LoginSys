@@ -11,7 +11,7 @@ import errorHandler from "../errors/errorHandler";
 
 function SignUp() {
 
-    const [email, setEmail] = useState("");
+    const [userName, setUserName] = useState("");
 
     const [pass, setPass] = useState("");
 
@@ -22,7 +22,7 @@ function SignUp() {
     async function submitForm(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
         const user: User = { 
-            Email: email,
+            UserName: userName,
             UserPassword: pass
         }
 
@@ -50,7 +50,7 @@ function SignUp() {
     return (
         <div className="authContainer">
             <h1>Sign Up</h1>
-            <Form setEmail={setEmail} setPass={setPass} submitForm={submitForm} />
+            <Form setUserName={setUserName} setPass={setPass} submitForm={submitForm} />
           <div>
               <p>Already have an account?</p>
               <NavLink to="/">

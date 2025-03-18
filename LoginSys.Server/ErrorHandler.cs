@@ -1,8 +1,8 @@
 ﻿namespace LoginSys.Server
 {
-    public class ErorrHandler
+    public class ErrorHandler
     {
-        public ErorrHandler(int code, string error, string message)
+        public ErrorHandler(int code, string error, string message)
         {
             Code = code;
             Error = error;

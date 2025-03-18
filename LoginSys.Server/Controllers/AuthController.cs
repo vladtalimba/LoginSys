@@ -14,7 +14,6 @@ namespace LoginSys.Server.Controllers
     {
         private readonly AppDbContext _db;
         private PasswordHasher<Users> passwordHasher;
-        private ErorrHandler error;
         
         public AuthController(AppDbContext db)
         {
@@ -37,6 +36,13 @@ namespace LoginSys.Server.Controllers
         public async Task<IActionResult> AddUser(Users user)
         {
             if (ModelState.IsValid) {
+                // Check if that username already exists.
+                Users existingUser = await _db.Users.FindAsync(user.UserName);
+
+                if(existingUser != null)
+                {
+                    return BadRequest(new ErrorHandler(400, "Bad request", "This username already exists"));
+                }
                 // After validating the model, hash user password and add entry inside db.
                 string hashedPass = passwordHasher.HashPassword(user, user.UserPassword);
                 user.UserPassword = hashedPass;
@@ -45,7 +51,7 @@ namespace LoginSys.Server.Controllers
             }
             else
             {
-                return BadRequest(new ErorrHandler(400, "Bad request", "The form is invalid"));
+                return BadRequest(new ErrorHandler(400, "Bad request", "The form is invalid"));
             }
             return Ok(ReturnUser(user));
         }
@@ -58,16 +64,15 @@ namespace LoginSys.Server.Controllers
         // Error handling here, redirection and validation on the client side???
         public async Task<IActionResult> GetUser(Users user)
         {
-            Console.WriteLine(ModelState);
             if (ModelState.IsValid)
             {
                 // Get user by Email.
-                Users dbUser = await _db.Users.FindAsync(user.Email);
+                Users dbUser = await _db.Users.FindAsync(user.UserName);
 
                 // If the user doesn't exist.
                 if(dbUser == null)
                 {
-                    return NotFound(new ErorrHandler(404, "Not found", "User was not found"));
+                    return NotFound(new ErrorHandler(404, "Not found", "User was not found"));
                 }
 
                 // Verify password.
@@ -76,7 +81,7 @@ namespace LoginSys.Server.Controllers
                     // Cookie settings.
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, user.Email),
+                        new Claim(ClaimTypes.Name, user.UserName),
                     };
 
                     var claimsIdentity = new ClaimsIdentity(
@@ -100,12 +105,12 @@ namespace LoginSys.Server.Controllers
                 }else
                 {
                     // If model is invalid, return error.
-                    return BadRequest(new ErorrHandler(400, "Bad request", "The form is invalid"));
+                    return BadRequest(new ErrorHandler(400, "Bad request", "The form is invalid"));
                 }
 
             }
             // Return error.
-            return NotFound(new ErorrHandler(404, "Not found", "User was not found"));
+            return NotFound(new ErrorHandler(404, "Not found", "User was not found"));
         }
 
         [EnableCors("Default")]

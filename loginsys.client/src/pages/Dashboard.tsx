@@ -5,7 +5,7 @@ function Dashboard() {
 
     const navigate = useNavigate();
 
-    const userState = useAppSelector((state) => state.Email);
+    const userState = useAppSelector((state) => state.UserName);
 
     async function LogOut(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault();

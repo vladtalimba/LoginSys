@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using LoginSys.Server.Data;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +46,7 @@ builder.Services.AddAuthentication().AddCookie(
 builder.Services.AddAuthorization(
     options =>
     {
+        // Could assign role requirements in order to access various pages inside the app.
         options.AddPolicy("loggedin", policy => policy.RequireClaim("loggedin", "true"));
     });
 

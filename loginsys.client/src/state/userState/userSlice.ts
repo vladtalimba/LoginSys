@@ -3,7 +3,7 @@ import type { RootState } from "../../store/store";
 import User from "../../interfaces/userInterface/IUser";
 
 const initialState: User = {
-    Email: "",
+    UserName: "",
     UserPassword: ""
 }
 
@@ -13,7 +13,7 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUserState: (state, action: PayloadAction<User>) => {
-            state.Email = action.payload.Email;
+            state.UserName = action.payload.UserName;
         }
     }
 
